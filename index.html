@@ -1,0 +1,1491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hard Fork — A Tech Podcast</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Space+Mono:wght@400;700&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=VT323&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --yellow: #E8E000;
+            --yellow-light: #F5F480;
+            --yellow-pale: #FFFDE7;
+            --cyan: #00D4E8;
+            --purple: #8B5CF6;
+            --orange: #FF6B35;
+            --pink: #EC4899;
+            --red: #EF4444;
+            --bg: #FAFAFA;
+            --bg-alt: #FFFFFF;
+            --text: #1A1A1A;
+            --text-secondary: #4A4A4A;
+            --text-muted: #888888;
+            --border: #E5E5E5;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 1rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(250, 250, 250, 0.9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo img {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+        }
+
+        .logo-text {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--text);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: center;
+            padding: 8rem 4rem 4rem;
+            gap: 4rem;
+            background: linear-gradient(135deg, var(--yellow-pale) 0%, var(--bg) 50%, #F0FDFF 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 80%;
+            height: 150%;
+            background: radial-gradient(circle, var(--yellow-light) 0%, transparent 60%);
+            opacity: 0.4;
+            pointer-events: none;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .hero-badge .nyt {
+            font-family: 'Libre Baskerville', serif;
+            font-weight: 700;
+            font-style: italic;
+        }
+
+        .hero h1 {
+            font-family: 'Libre Baskerville', serif;
+            font-size: clamp(3rem, 7vw, 5rem);
+            line-height: 1.1;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 0.6s ease-out 0.1s both;
+        }
+
+        .hero h1 .highlight {
+            position: relative;
+            display: inline-block;
+        }
+
+        .hero h1 .highlight::after {
+            content: '';
+            position: absolute;
+            bottom: 0.1em;
+            left: -0.05em;
+            right: -0.05em;
+            height: 0.35em;
+            background: var(--yellow);
+            z-index: -1;
+            transform: skewX(-3deg);
+        }
+
+        .hero-tagline {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            max-width: 500px;
+            animation: fadeInUp 0.6s ease-out 0.2s both;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.6s ease-out 0.3s both;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 1.75rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+            text-decoration: none;
+            border-radius: 100px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--text);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #333;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--text);
+            border: 2px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--text);
+        }
+
+        .hero-artwork {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        .artwork-container {
+            position: relative;
+            width: 100%;
+            max-width: 420px;
+        }
+
+        .artwork-container img {
+            width: 100%;
+            border-radius: 24px;
+            box-shadow: 0 24px 80px rgba(0,0,0,0.12), 0 8px 24px rgba(0,0,0,0.08);
+        }
+
+        .ascii-artwork {
+            width: 100%;
+            aspect-ratio: 1;
+            border-radius: 24px;
+            background: var(--yellow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 24px 80px rgba(0,0,0,0.12), 0 8px 24px rgba(0,0,0,0.08);
+            padding: 1.5rem;
+        }
+
+        .ascii-artwork pre {
+            font-family: 'VT323', 'Courier New', monospace;
+            font-size: clamp(0.5rem, 1.2vw, 0.85rem);
+            line-height: 1.15;
+            color: var(--text);
+            text-align: center;
+            margin: 0;
+            white-space: pre;
+        }
+
+        .floating-badge {
+            position: absolute;
+            background: white;
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .floating-badge.top-right {
+            top: -12px;
+            right: -12px;
+            background: var(--purple);
+            color: white;
+        }
+
+        .floating-badge.bottom-left {
+            bottom: 20px;
+            left: -20px;
+            background: white;
+        }
+
+        .floating-badge .stars {
+            color: var(--orange);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(24px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Episodes Section */
+        .episodes {
+            padding: 6rem 4rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-header h2 {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+
+        .section-header .view-all {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .section-header .view-all:hover {
+            color: var(--text);
+            gap: 0.75rem;
+        }
+
+        /* Featured Episode */
+        .featured-episode {
+            margin-bottom: 3rem;
+        }
+
+        .featured-episode .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 16px 48px rgba(0,0,0,0.1);
+        }
+
+        .featured-episode iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .featured-episode .episode-info {
+            margin-top: 1.5rem;
+        }
+
+        .featured-episode .episode-label {
+            display: inline-block;
+            background: var(--yellow);
+            padding: 0.35rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.75rem;
+        }
+
+        .featured-episode h3 {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .featured-episode p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        /* Episode List */
+        .episodes-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .episode-card {
+            display: grid;
+            grid-template-columns: 180px 1fr auto;
+            gap: 1.25rem;
+            padding: 1rem;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            align-items: center;
+        }
+
+        .episode-card:hover {
+            border-color: var(--yellow);
+            box-shadow: 0 8px 32px rgba(232, 224, 0, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .episode-thumbnail {
+            position: relative;
+            width: 180px;
+            height: 100px;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #f0f0f0;
+        }
+
+        .episode-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .episode-thumbnail .play-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .episode-card:hover .play-overlay {
+            opacity: 1;
+        }
+
+        .play-overlay svg {
+            width: 48px;
+            height: 48px;
+            fill: white;
+            filter: drop-shadow(0 2px 8px rgba(0,0,0,0.3));
+        }
+
+        .episode-content h3 {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.35rem;
+            line-height: 1.4;
+        }
+
+        .episode-content p {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+
+        .episode-meta {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 0.5rem;
+        }
+
+        .episode-date {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .episode-duration {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            background: var(--bg);
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
+        }
+
+        /* Hosts Section */
+        .hosts {
+            padding: 6rem 4rem;
+            background: white;
+        }
+
+        .hosts-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .hosts-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .hosts-header h2 {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .hosts-header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .hosts-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .host-card {
+            padding: 2.5rem;
+            background: var(--bg);
+            border-radius: 24px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .host-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, var(--yellow) 0%, var(--cyan) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .host-card:hover::before {
+            opacity: 1;
+        }
+
+        .host-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 48px rgba(0,0,0,0.08);
+        }
+
+        .host-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Libre Baskerville', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .host-card:first-child .host-avatar {
+            background: linear-gradient(135deg, var(--yellow) 0%, var(--yellow-light) 100%);
+        }
+
+        .host-card:last-child .host-avatar {
+            background: linear-gradient(135deg, var(--cyan) 0%, #7DD3FC 100%);
+        }
+
+        .host-name {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .host-title {
+            color: var(--purple);
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1.25rem;
+        }
+
+        .host-bio {
+            font-size: 1rem;
+            line-height: 1.75;
+            color: var(--text-secondary);
+        }
+
+        .host-bio strong {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .host-links {
+            display: flex;
+            gap: 1.25rem;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .host-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+            transition: color 0.3s ease;
+        }
+
+        .host-links a:hover {
+            color: var(--text);
+        }
+
+        /* Guestbook Section - GeoCities Style */
+        .guestbook {
+            padding: 6rem 4rem;
+            background: linear-gradient(180deg, #FFFDE7 0%, #FFF9C4 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .guestbook::before {
+            content: '★ ✧ ★ ✧ ★ ✧ ★ ✧ ★ ✧ ★ ✧ ★ ✧ ★ ✧ ★ ✧ ★ ✧ ★';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 1.5rem;
+            color: var(--purple);
+            padding: 0.5rem;
+            background: linear-gradient(90deg, var(--cyan), var(--purple), var(--pink), var(--orange), var(--yellow));
+            background-clip: text;
+            -webkit-background-clip: text;
+            animation: sparkle 3s ease-in-out infinite;
+        }
+
+        @keyframes sparkle {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+        }
+
+        .guestbook-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .guestbook-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .guestbook-header h2 {
+            font-family: 'VT323', monospace;
+            font-size: 3.5rem;
+            color: var(--purple);
+            text-shadow: 3px 3px 0 var(--pink), -1px -1px 0 var(--cyan);
+            margin-bottom: 0.5rem;
+            animation: rainbow 5s linear infinite;
+        }
+
+        @keyframes rainbow {
+            0% { color: var(--purple); }
+            25% { color: var(--pink); }
+            50% { color: var(--orange); }
+            75% { color: var(--cyan); }
+            100% { color: var(--purple); }
+        }
+
+        .guestbook-header p {
+            font-family: 'VT323', monospace;
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+        }
+
+        .guestbook-header .counter {
+            display: inline-block;
+            background: black;
+            color: #00FF00;
+            font-family: 'VT323', monospace;
+            font-size: 1.25rem;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            margin-top: 1rem;
+        }
+
+        .guestbook-form {
+            background: white;
+            border: 3px solid var(--purple);
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 8px 8px 0 var(--yellow);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            font-family: 'VT323', monospace;
+            font-size: 1.25rem;
+            color: var(--purple);
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            padding: 0.75rem;
+            border: 2px solid var(--border);
+            border-radius: 6px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--purple);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .rating-select {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .rating-option {
+            padding: 0.5rem 1rem;
+            background: var(--bg);
+            border: 2px solid var(--border);
+            border-radius: 100px;
+            cursor: pointer;
+            font-size: 1.25rem;
+            transition: all 0.2s ease;
+        }
+
+        .rating-option:hover,
+        .rating-option.selected {
+            background: var(--yellow-light);
+            border-color: var(--yellow);
+        }
+
+        .guestbook-form button {
+            background: linear-gradient(135deg, var(--purple) 0%, var(--pink) 100%);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            font-family: 'VT323', monospace;
+            font-size: 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .guestbook-form button:hover {
+            transform: scale(1.02);
+        }
+
+        .guestbook-entries {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .guestbook-entry {
+            background: white;
+            border: 2px dashed var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            position: relative;
+        }
+
+        .guestbook-entry::before {
+            content: '📝';
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: white;
+            padding: 0 0.5rem;
+        }
+
+        .entry-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .entry-name {
+            font-family: 'VT323', monospace;
+            font-size: 1.5rem;
+            color: var(--purple);
+        }
+
+        .entry-rating {
+            font-size: 1.25rem;
+        }
+
+        .entry-message {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 0.75rem;
+        }
+
+        .entry-date {
+            font-family: 'VT323', monospace;
+            font-size: 1rem;
+            color: var(--text-muted);
+        }
+
+        .entry-location {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* Subscribe Section */
+        .subscribe {
+            padding: 6rem 4rem;
+            background: var(--yellow);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .subscribe-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .subscribe h2 {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .subscribe p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .subscribe-platforms {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .platform-link {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.9rem 1.25rem;
+            background: white;
+            border-radius: 100px;
+            text-decoration: none;
+            color: var(--text);
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        .platform-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+        }
+
+        .platform-link svg {
+            width: 22px;
+            height: 22px;
+        }
+
+        /* Footer */
+        footer {
+            padding: 3rem 4rem;
+            background: white;
+            border-top: 1px solid var(--border);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .footer-logo img {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+        }
+
+        .footer-logo span {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--text);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero {
+                grid-template-columns: 1fr;
+                text-align: center;
+                padding: 7rem 2rem 4rem;
+            }
+
+            .hero-content {
+                order: 2;
+            }
+
+            .hero-artwork {
+                order: 1;
+            }
+
+            .hero-tagline {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .hero-cta {
+                justify-content: center;
+            }
+
+            .hosts-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .artwork-container {
+                max-width: 300px;
+            }
+
+            .episode-card {
+                grid-template-columns: 1fr;
+            }
+
+            .episode-thumbnail {
+                width: 100%;
+                height: 180px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 0.75rem 1.5rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero, .episodes, .hosts, .subscribe, .guestbook {
+                padding-left: 1.5rem;
+                padding-right: 1.5rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .episode-meta {
+                flex-direction: row;
+                justify-content: flex-start;
+            }
+
+            .host-card {
+                padding: 1.75rem;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                gap: 1.5rem;
+                text-align: center;
+            }
+
+            .guestbook-header h2 {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="logo">
+            <img src="https://yt3.googleusercontent.com/kNPNXqZUmSIRNGCr9dsPDNYy7uOwRlT_VZrk7hgV1UFBhIQMjE_0IHvULKHj_hNf5oS-wCjf=s176-c-k-c0x00ffffff-no-rj" alt="Hard Fork">
+            <span class="logo-text">Hard Fork</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#episodes">Episodes</a></li>
+            <li><a href="#hosts">Hosts</a></li>
+            <li><a href="#guestbook">Guestbook</a></li>
+            <li><a href="#subscribe">Subscribe</a></li>
+        </ul>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <span class="hero-badge">
+                <span class="nyt">The New York Times</span> · Weekly Podcast
+            </span>
+            <h1>A show about the <span class="highlight">future</span> that's already here</h1>
+            <p class="hero-tagline">Each week, journalists Kevin Roose and Casey Newton explore and make sense of the rapidly changing world of tech.</p>
+            <div class="hero-cta">
+                <a href="#episodes" class="btn btn-primary">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                    Watch Latest
+                </a>
+                <a href="#subscribe" class="btn btn-secondary">Subscribe Free</a>
+            </div>
+        </div>
+        <div class="hero-artwork">
+            <div class="artwork-container">
+                <div class="ascii-artwork">
+                    <pre>
+    ╔═══════════════════════════════════╗
+    ║                                   ║
+    ║   ██╗  ██╗ █████╗ ██████╗ ██████╗ ║
+    ║   ██║  ██║██╔══██╗██╔══██╗██╔══██╗║
+    ║   ███████║███████║██████╔╝██║  ██║║
+    ║   ██╔══██║██╔══██║██╔══██╗██║  ██║║
+    ║   ██║  ██║██║  ██║██║  ██║██████╔╝║
+    ║   ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝ ║
+    ║                                   ║
+    ║   ███████╗ ██████╗ ██████╗ ██╗  ██║
+    ║   ██╔════╝██╔═══██╗██╔══██╗██║ ██╔╝║
+    ║   █████╗  ██║   ██║██████╔╝█████╔╝ ║
+    ║   ██╔══╝  ██║   ██║██╔══██╗██╔═██╗ ║
+    ║   ██║     ╚██████╔╝██║  ██║██║  ██╗║
+    ║   ╚═╝      ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝║
+    ║                                   ║
+    ║      ┌─────────────────────┐      ║
+    ║      │  A  TECH  PODCAST   │      ║
+    ║      └─────────────────────┘      ║
+    ║                                   ║
+    ║    (•_•)          ( •_•)          ║
+    ║    Casey  ~~~~~~  Kevin           ║
+    ║                                   ║
+    ║     🎙️  NEW YORK TIMES  🎙️       ║
+    ║                                   ║
+    ╚═══════════════════════════════════╝
+                    </pre>
+                </div>
+                <div class="floating-badge top-right">New Episode!</div>
+                <div class="floating-badge bottom-left">
+                    <span class="stars">★★★★★</span> 50.3K subs
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="episodes" id="episodes">
+        <div class="section-header">
+            <h2>Latest Episodes</h2>
+            <a href="https://www.youtube.com/@hardfork" class="view-all" target="_blank">
+                View All on YouTube
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+        </div>
+
+        <div class="featured-episode">
+            <div class="video-container">
+                <iframe
+                    src="https://www.youtube-nocookie.com/embed/hchsgcuDBfs?rel=0&modestbranding=1&playsinline=1"
+                    title="Hard Fork - Latest Episode"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    referrerpolicy="strict-origin-when-cross-origin"
+                    allowfullscreen>
+                </iframe>
+            </div>
+            <div class="episode-info">
+                <span class="episode-label">Latest Episode</span>
+                <h3>The Dark Side of Grok and a New Wave of A.I. Harassment | EP 173</h3>
+                <p>Users are asking Grok to remove clothing from images. We talk with the New York Times reporter Kate Conger about the targets of this A.I. harassment.</p>
+            </div>
+        </div>
+
+        <div class="episodes-list">
+            <a href="https://www.youtube.com/watch?v=XAYc9NTJ-Mo" class="episode-card" target="_blank">
+                <div class="episode-thumbnail">
+                    <img src="https://i.ytimg.com/vi/XAYc9NTJ-Mo/hqdefault.jpg" alt="Episode thumbnail">
+                    <div class="play-overlay">
+                        <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                    </div>
+                </div>
+                <div class="episode-content">
+                    <h3>How to Optimize Your Life in 2026: Productivity Tips, Deepfakes, and More | EP 172</h3>
+                    <p>Our 2026 tech resolutions and answers to your listener questions.</p>
+                </div>
+                <div class="episode-meta">
+                    <span class="episode-date">12 days ago</span>
+                    <span class="episode-duration">55:12</span>
+                </div>
+            </a>
+
+            <a href="https://www.youtube.com/watch?v=Dn4OWufAggk" class="episode-card" target="_blank">
+                <div class="episode-thumbnail">
+                    <img src="https://i.ytimg.com/vi/Dn4OWufAggk/hqdefault.jpg" alt="Episode thumbnail">
+                    <div class="play-overlay">
+                        <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                    </div>
+                </div>
+                <div class="episode-content">
+                    <h3>A.I. Scientists Are Here. But Is Progress Accelerating? | EP 170</h3>
+                    <p>What has A.I. actually done for science? We dig into the research.</p>
+                </div>
+                <div class="episode-meta">
+                    <span class="episode-date">2 weeks ago</span>
+                    <span class="episode-duration">37:39</span>
+                </div>
+            </a>
+
+            <a href="https://www.youtube.com/watch?v=kQNTk9T-Mrg" class="episode-card" target="_blank">
+                <div class="episode-thumbnail">
+                    <img src="https://i.ytimg.com/vi/kQNTk9T-Mrg/hqdefault.jpg" alt="Episode thumbnail">
+                    <div class="play-overlay">
+                        <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                    </div>
+                </div>
+                <div class="episode-content">
+                    <h3>What Does iRobot's Bankruptcy Mean for the Future of U.S. Robotics?</h3>
+                    <p>Why Roomba died and what it means for American robotics and A.I. startups.</p>
+                </div>
+                <div class="episode-meta">
+                    <span class="episode-date">3 weeks ago</span>
+                    <span class="episode-duration">59:56</span>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <section class="hosts" id="hosts">
+        <div class="hosts-container">
+            <div class="hosts-header">
+                <h2>Meet Your Hosts</h2>
+                <p>Two journalists making sense of tech, one podcast at a time</p>
+            </div>
+            <div class="hosts-grid">
+                <div class="host-card">
+                    <div class="host-avatar">CN</div>
+                    <h3 class="host-name">Casey Newton</h3>
+                    <p class="host-title">Founder, Platformer</p>
+                    <p class="host-bio">
+                        <strong>The handsome one.</strong> Casey is the founder and editor of Platformer, a publication about the intersection of tech and democracy trusted by over 200,000 weekly readers. He spent a decade covering Silicon Valley for The Verge, CNET, and the San Francisco Chronicle. His reporting was a finalist for the National Magazine Award. A proud Northwestern journalism grad, Casey brings sharp analysis and occasional chaos to every episode.
+                    </p>
+                    <div class="host-links">
+                        <a href="https://www.platformer.news/" target="_blank">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                            Platformer
+                        </a>
+                        <a href="https://twitter.com/caseynewton" target="_blank">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                            Twitter
+                        </a>
+                    </div>
+                </div>
+
+                <div class="host-card">
+                    <div class="host-avatar">KR</div>
+                    <h3 class="host-name">Kevin Roose</h3>
+                    <p class="host-title">Tech Columnist, The New York Times</p>
+                    <p class="host-bio">
+                        <strong>The one who talks to chatbots.</strong> Kevin is a technology columnist at The New York Times, where he writes "The Shift" examining tech, business, and culture. He previously created Rabbit Hole, a Peabody Award finalist about internet radicalization. He's the author of three books including <em>Futureproof</em>, and his conversation with Bing's "Sydney" made headlines worldwide. His fourth book on A.G.I. drops in 2026. Brown grad. Robot vacuum enthusiast.
+                    </p>
+                    <div class="host-links">
+                        <a href="https://kevinroose.com/" target="_blank">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                            Website
+                        </a>
+                        <a href="https://twitter.com/kevinroose" target="_blank">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                            Twitter
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="guestbook" id="guestbook">
+        <div class="guestbook-container">
+            <div class="guestbook-header">
+                <h2>~ GUESTBOOK ~</h2>
+                <p>Sign our guestbook! Let us know what you think!</p>
+                <div class="counter">You are visitor #<span id="visitor-count">48,291</span></div>
+            </div>
+
+            <form class="guestbook-form" id="guestbook-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Your Name *</label>
+                        <input type="text" placeholder="Enter your name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Location</label>
+                        <input type="text" placeholder="City, State/Country">
+                    </div>
+                </div>
+                <div class="form-group full">
+                    <label>Rate the Show *</label>
+                    <div class="rating-select">
+                        <span class="rating-option" data-rating="5">🔥🔥🔥🔥🔥</span>
+                        <span class="rating-option" data-rating="4">🔥🔥🔥🔥</span>
+                        <span class="rating-option" data-rating="3">🔥🔥🔥</span>
+                        <span class="rating-option" data-rating="2">🔥🔥</span>
+                        <span class="rating-option" data-rating="1">🔥</span>
+                    </div>
+                </div>
+                <div class="form-group full">
+                    <label>Your Message *</label>
+                    <textarea placeholder="What do you think of Hard Fork? Any episode suggestions?" required></textarea>
+                </div>
+                <button type="submit">✨ Sign the Guestbook ✨</button>
+            </form>
+
+            <div class="guestbook-entries" id="guestbook-entries">
+                <div class="guestbook-entry">
+                    <div class="entry-header">
+                        <span class="entry-name">TechFan2025</span>
+                        <span class="entry-rating">🔥🔥🔥🔥🔥</span>
+                    </div>
+                    <p class="entry-message">Best tech podcast out there! Casey and Kevin have amazing chemistry. The episode about AI scientists was mind-blowing. Keep up the great work! 🎙️</p>
+                    <div class="entry-date">January 12, 2026 · <span class="entry-location">San Francisco, CA</span></div>
+                </div>
+
+                <div class="guestbook-entry">
+                    <div class="entry-header">
+                        <span class="entry-name">AISkeptic42</span>
+                        <span class="entry-rating">🔥🔥🔥🔥</span>
+                    </div>
+                    <p class="entry-message">Love how you two break down complex AI topics for regular people. Would love more episodes about AI regulation! Also Casey is indeed handsome 😂</p>
+                    <div class="entry-date">January 10, 2026 · <span class="entry-location">Brooklyn, NY</span></div>
+                </div>
+
+                <div class="guestbook-entry">
+                    <div class="entry-header">
+                        <span class="entry-name">RoombaMom</span>
+                        <span class="entry-rating">🔥🔥🔥🔥🔥</span>
+                    </div>
+                    <p class="entry-message">The iRobot episode hit different... RIP to my Roomba dreams 😢 But seriously, this is the only podcast that makes me actually understand what's happening in tech. Thank you!!</p>
+                    <div class="entry-date">January 8, 2026 · <span class="entry-location">Austin, TX</span></div>
+                </div>
+
+                <div class="guestbook-entry">
+                    <div class="entry-header">
+                        <span class="entry-name">DevDude_Mike</span>
+                        <span class="entry-rating">🔥🔥🔥🔥🔥</span>
+                    </div>
+                    <p class="entry-message">Been listening since episode 1! The Grok coverage was important journalism. Someone needs to hold these companies accountable. You two are doing great work. 💪</p>
+                    <div class="entry-date">January 5, 2026 · <span class="entry-location">Seattle, WA</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="subscribe" id="subscribe">
+        <div class="subscribe-content">
+            <h2>Never Miss an Episode</h2>
+            <p>New episodes every Friday. Subscribe wherever you get your podcasts.</p>
+            <div class="subscribe-platforms">
+                <a href="https://www.youtube.com/@hardfork?sub_confirmation=1" class="platform-link" target="_blank">
+                    <svg viewBox="0 0 24 24" fill="#FF0000"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                    YouTube
+                </a>
+                <a href="https://podcasts.apple.com/us/podcast/hard-fork/id1528594034" class="platform-link" target="_blank">
+                    <svg viewBox="0 0 24 24" fill="#8B5CF6"><path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></svg>
+                    Apple Podcasts
+                </a>
+                <a href="https://open.spotify.com/show/44fllCS2FTFr2x2kjP9xeT" class="platform-link" target="_blank">
+                    <svg viewBox="0 0 24 24" fill="#1DB954"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+                    Spotify
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">
+                <img src="https://yt3.googleusercontent.com/kNPNXqZUmSIRNGCr9dsPDNYy7uOwRlT_VZrk7hgV1UFBhIQMjE_0IHvULKHj_hNf5oS-wCjf=s176-c-k-c0x00ffffff-no-rj" alt="Hard Fork">
+                <span>Hard Fork</span>
+            </div>
+            <div class="footer-links">
+                <a href="https://www.nytimes.com" target="_blank">The New York Times</a>
+                <a href="https://www.youtube.com/@hardfork" target="_blank">YouTube</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Visitor Counter - Using localStorage + unique session tracking
+        (async function initVisitorCounter() {
+            const visitorCountEl = document.getElementById('visitor-count');
+            const STORAGE_KEY = 'hardfork_visitor_count';
+            const SESSION_KEY = 'hardfork_session_counted';
+
+            // Get or initialize the count
+            let count = parseInt(localStorage.getItem(STORAGE_KEY)) || 48291;
+
+            // Only increment if this session hasn't been counted
+            if (!sessionStorage.getItem(SESSION_KEY)) {
+                count++;
+                localStorage.setItem(STORAGE_KEY, count);
+                sessionStorage.setItem(SESSION_KEY, 'true');
+            }
+
+            // Display with animation
+            visitorCountEl.textContent = count.toLocaleString();
+
+            // Try to sync with a real API counter as well (CountAPI alternative)
+            try {
+                const namespace = 'hardfork-podcast';
+                const key = 'visitors';
+                const response = await fetch(`https://api.counterapi.dev/v1/${namespace}/${key}/up`);
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.count && data.count > count) {
+                        visitorCountEl.textContent = data.count.toLocaleString();
+                        localStorage.setItem(STORAGE_KEY, data.count);
+                    }
+                }
+            } catch (e) {
+                // API unavailable, use local count
+                console.log('Using local visitor count');
+            }
+        })();
+
+        // Rating selection
+        const ratingOptions = document.querySelectorAll('.rating-option');
+        let selectedRating = 0;
+
+        ratingOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                ratingOptions.forEach(o => o.classList.remove('selected'));
+                option.classList.add('selected');
+                selectedRating = parseInt(option.dataset.rating);
+            });
+        });
+
+        // Guestbook form submission
+        const guestbookForm = document.getElementById('guestbook-form');
+        const guestbookEntries = document.getElementById('guestbook-entries');
+
+        guestbookForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const name = guestbookForm.querySelector('input[type="text"]').value;
+            const location = guestbookForm.querySelectorAll('input[type="text"]')[1].value || 'Unknown';
+            const message = guestbookForm.querySelector('textarea').value;
+
+            if (!selectedRating) {
+                alert('Please select a rating!');
+                return;
+            }
+
+            const ratingEmoji = '🔥'.repeat(selectedRating);
+            const today = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+
+            const newEntry = document.createElement('div');
+            newEntry.className = 'guestbook-entry';
+            newEntry.innerHTML = `
+                <div class="entry-header">
+                    <span class="entry-name">${name}</span>
+                    <span class="entry-rating">${ratingEmoji}</span>
+                </div>
+                <p class="entry-message">${message}</p>
+                <div class="entry-date">${today} · <span class="entry-location">${location}</span></div>
+            `;
+
+            guestbookEntries.insertBefore(newEntry, guestbookEntries.firstChild);
+            guestbookForm.reset();
+            ratingOptions.forEach(o => o.classList.remove('selected'));
+            selectedRating = 0;
+        });
+
+        // Intersection Observer for scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -30px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Animate episode cards on scroll
+        document.querySelectorAll('.episode-card').forEach((card, index) => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = `all 0.5s ease ${index * 0.08}s`;
+            observer.observe(card);
+        });
+
+        // Animate host cards on scroll
+        document.querySelectorAll('.host-card').forEach((card, index) => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = `all 0.5s ease ${index * 0.12}s`;
+            observer.observe(card);
+        });
+
+        // Smooth scroll for nav links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
